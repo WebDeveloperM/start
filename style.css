@@ -11,6 +11,7 @@
   --button-dark: #0f3fb8;
   --verified: #5dffb4;
   --neon: #39e6ff;
+  --check: #2dff6e;
   /* Yakuniy bosqich: hamma narsa shu oraliqda yashilga o'tadi va --hold bilan birga tugaydi */
   --finish-at: calc(var(--hold) * 0.84);
   --finish: calc(var(--hold) * 0.16);
@@ -328,7 +329,7 @@ h2 {
   animation: verified-burst var(--finish) var(--finish-at) ease-out;
 }
 
-/* Tekshiruv tugagach butun ekran xiralashadi, matn yuqoridan o'rtaga tushadi */
+/* Tekshiruv tugagach sahifa o'rniga yakuniy ekran chiqadi, matn o'rtadan ikki chetga ochiladi */
 .reveal {
   position: absolute;
   inset: 0;
@@ -336,68 +337,136 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  /* Rasm ekrandan kengroq: tepa va pastdagi bo'sh joy rasm cheti rangida */
+  background: linear-gradient(#001f64, #001b59);
+  opacity: 0;
   pointer-events: none;
-  transition: background-color 0.8s ease, backdrop-filter 0.8s ease;
+  transition: opacity 0.8s ease;
 }
 
 .verified .reveal {
-  background-color: rgb(10 30 90 / 55%);
-  backdrop-filter: blur(calc(var(--u) * 12));
+  opacity: 1;
 }
 
-.reveal-text {
+.reveal-stage {
   position: relative;
-  font-size: 90px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  /* Oraliq oxirgi harfdan keyin ham qo'shiladi: matn o'rtadan surilmasligi uchun chapga ham beriladi */
-  padding: 0.35em 0 0.35em 0.08em;
-  line-height: 1.5;
-  text-wrap: balance;
-  transform: translateY(-100vh);
-  color: var(--text);
-  text-shadow: 0 0 0.05em var(--text), 0 0 0.16em var(--neon), 0 0 0.4em rgb(57 230 255 / 55%);
+  width: min(100vw, 100vh * 1280 / 611);
+  aspect-ratio: 1280 / 611;
 }
 
-.reveal-text::before,
-.reveal-text::after {
-  content: "";
+.reveal-bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fon rasmidagi eski gerbni yopadi: joyi va o'lchami rasmga nisbatan */
+.reveal-gerb {
   position: absolute;
-  left: -5%;
-  right: -5%;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--text) 20%, var(--text) 80%, transparent);
-  filter: drop-shadow(0 0 0.12em var(--glow));
-  transform: scaleX(0);
+  top: 5.254%;
+  left: 75.73%;
+  width: 15.647%;
 }
 
-.reveal-text::before {
-  top: 0;
-}
-
-.reveal-text::after {
-  bottom: 0;
+/* Markazi fon rasmidagi aylana markaziga to'g'ri keladi */
+.reveal-text {
+  position: absolute;
+  top: 53.1%;
+  left: 49.34%;
+  width: 48%;
+  translate: -50% -50%;
+  clip-path: inset(0 50%);
 }
 
 .verified .reveal-text {
-  animation: reveal-drop 2.2s ease-out forwards;
+  animation: reveal-open 1.4s 0.6s ease-out forwards;
 }
 
-.verified .reveal-text::before,
-.verified .reveal-text::after {
-  animation: reveal-line 0.8s 2.2s ease-out forwards;
-}
-
-@keyframes reveal-drop {
+@keyframes reveal-open {
   to {
-    transform: translateY(0);
+    clip-path: inset(0 0);
   }
 }
 
-@keyframes reveal-line {
+/* Matn ochilgach aylana ichida, nuqtali halqa ustida neon check paydo bo'ladi */
+.reveal-check {
+  position: absolute;
+  top: 73.5%;
+  left: 49.34%;
+  width: 6.6%;
+  translate: -50% -50%;
+  overflow: visible;
+  opacity: 0;
+  scale: 0;
+}
+
+.check-halo {
+  fill: var(--check);
+  opacity: 0;
+  filter: blur(10px);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.check-ring,
+.check-mark {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+.check-ring {
+  stroke: #8dffb0;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 4px var(--check));
+}
+
+.check-mark {
+  stroke: var(--text);
+  stroke-width: 9;
+  filter: drop-shadow(0 0 3px var(--text));
+}
+
+.verified .reveal-check {
+  animation: check-pop 0.45s 1.9s cubic-bezier(0.3, 1.6, 0.5, 1) forwards;
+}
+
+.verified .check-ring {
+  animation: check-draw 0.55s 1.9s ease-out forwards;
+}
+
+.verified .check-mark {
+  animation: check-draw 0.35s 2.3s ease-out forwards;
+}
+
+.verified .check-halo {
+  animation: check-pulse 1.6s 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes check-pop {
   to {
-    transform: scaleX(1);
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes check-pulse {
+  from {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0.85;
+    transform: scale(1.18);
   }
 }
 
@@ -522,11 +591,26 @@ h2 {
     animation: none;
   }
 
-  .verified .reveal-text,
-  .verified .reveal-text::before,
-  .verified .reveal-text::after {
+  .verified .reveal-text {
     animation: none;
-    transform: none;
+    clip-path: none;
+  }
+
+  .verified .reveal-check {
+    animation: none;
+    opacity: 1;
+    scale: 1;
+  }
+
+  .verified .check-ring,
+  .verified .check-mark {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .verified .check-halo {
+    animation: none;
+    opacity: 0.6;
   }
 
   .scanning .palm .under-light,
