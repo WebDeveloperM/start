@@ -357,7 +357,7 @@ h2 {
   text-wrap: balance;
   transform: translateY(-100vh);
   color: var(--text);
-  filter: drop-shadow(0 0 0.06em rgb(255 255 255 / 70%)) drop-shadow(0 0 0.3em var(--glow));
+  text-shadow: 0 0 0.05em var(--text), 0 0 0.16em var(--neon), 0 0 0.4em rgb(57 230 255 / 55%);
 }
 
 .reveal-text::before,
@@ -368,6 +368,7 @@ h2 {
   right: -5%;
   height: 3px;
   background: linear-gradient(90deg, transparent, var(--text) 20%, var(--text) 80%, transparent);
+  filter: drop-shadow(0 0 0.12em var(--glow));
   transform: scaleX(0);
 }
 
