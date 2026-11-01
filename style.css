@@ -69,11 +69,6 @@ body {
   stroke-width: 5;
 }
 
-.hud .dots {
-  stroke-width: 8;
-  stroke-linecap: round;
-}
-
 .hud .globe-grid {
   stroke: #fff;
   stroke-width: 1;
@@ -318,31 +313,6 @@ h2 {
   text-anchor: middle;
 }
 
-.step-label {
-  opacity: 0;
-  fill: var(--text);
-  stroke: none;
-  font-size: 24px;
-  font-weight: 600;
-  text-anchor: end;
-}
-
-.step-3 {
-  --at: 0.84;
-}
-
-.scanning .step-label {
-  animation: step-label 0.25s calc(var(--hold) * var(--at)) forwards;
-}
-
-.scanning .step-label.step-3 {
-  fill: var(--verified);
-}
-
-.scanning .step-ring {
-  animation: step-ring 0.25s calc(var(--hold) * var(--at)) forwards;
-}
-
 #start-button:hover {
   transform: scale(1.02);
 }
@@ -386,11 +356,8 @@ h2 {
   line-height: 1.5;
   text-wrap: balance;
   transform: translateY(-100vh);
-  color: transparent;
-  background: linear-gradient(100deg, var(--verified) 40%, #fff 50%, var(--verified) 60%) 100% 0 / 250% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: drop-shadow(0 0 0.06em rgb(93 255 180 / 85%)) drop-shadow(0 0 0.3em rgb(93 255 180 / 45%));
+  color: var(--text);
+  filter: drop-shadow(0 0 0.06em rgb(255 255 255 / 70%)) drop-shadow(0 0 0.3em var(--glow));
 }
 
 .reveal-text::before,
@@ -400,7 +367,7 @@ h2 {
   left: -5%;
   right: -5%;
   height: 3px;
-  background: linear-gradient(90deg, transparent, var(--verified) 20%, #fff 50%, var(--verified) 80%, transparent);
+  background: linear-gradient(90deg, transparent, var(--text) 20%, var(--text) 80%, transparent);
   transform: scaleX(0);
 }
 
@@ -413,7 +380,7 @@ h2 {
 }
 
 .verified .reveal-text {
-  animation: reveal-drop 2.2s ease-out forwards, reveal-shine 1.4s 2.4s ease-in-out forwards;
+  animation: reveal-drop 2.2s ease-out forwards;
 }
 
 .verified .reveal-text::before,
@@ -430,12 +397,6 @@ h2 {
 @keyframes reveal-line {
   to {
     transform: scaleX(1);
-  }
-}
-
-@keyframes reveal-shine {
-  to {
-    background-position: 0 0;
   }
 }
 
@@ -528,19 +489,6 @@ h2 {
 
   to {
     transform: translateY(215px);
-  }
-}
-
-@keyframes step-label {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes step-ring {
-  to {
-    stroke: var(--text);
-    stroke-width: 3;
   }
 }
 
